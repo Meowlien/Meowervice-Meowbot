@@ -4,7 +4,7 @@
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>51367b58-84dc-4cbf-b0b0-1ffa6ef22a03</ProjectGuid>
+    <ProjectGuid>c87c1d6a-3033-40bd-88d3-7a4784370094</ProjectGuid>
     <ProjectHome>.</ProjectHome>
     <ProjectTypeGuids>{789894c7-04a9-4a11-a6b5-3f4435165112};{1b580a1a-fdb3-4b32-83e1-6407eb2722e6};{349c5851-65df-11da-9384-00065b846f21};{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
     <StartupFile>program.py</StartupFile>
@@ -28,13 +28,14 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Meowbot\Views\LineBotView.py" />
-    <Compile Include="program.py" />
+    <Compile Include="Meowbot\controllers\linebot_view.py" />
     <Compile Include="Meowbot\__init__.py" />
+    <Compile Include="program.py" />
+    <Compile Include="settings.py" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Meowbot\" />
-    <Folder Include="Meowbot\Views\" />
+    <Folder Include="Meowbot\controllers\" />
     <Folder Include="Meowbot\static\" />
     <Folder Include="Meowbot\static\content\" />
     <Folder Include="Meowbot\static\fonts\" />
@@ -69,6 +70,7 @@
     <Content Include="Meowbot\templates\contact.html" />
     <Content Include="Meowbot\templates\index.html" />
     <Content Include="Meowbot\templates\layout.html" />
+    <Content Include="Settings.ini" />
   </ItemGroup>
   <ItemGroup>
     <Interpreter Include="env-meowbot-py3.9\">
@@ -82,9 +84,14 @@
     </Interpreter>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\MeowkitPy\MeowkitPy\MeowkitPy.pyproj">
+      <Name>MeowkitPy</Name>
+      <Project>{8090ec08-902d-44f0-b645-c5203d21a63b}</Project>
+      <Private>True</Private>
+    </ProjectReference>
     <ProjectReference Include="..\..\MeowlatePy-Meolask\Meolask\Meolask.pyproj">
       <Name>Meolask</Name>
-      <Project>{f0254456-c257-4ac6-806f-0e52e02adb11}</Project>
+      <Project>{cf225425-bc03-47a8-95cb-772d220c14de}</Project>
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>

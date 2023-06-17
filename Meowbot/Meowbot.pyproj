@@ -28,7 +28,20 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Meowbot\controllers\chatgpt_view.py" />
     <Compile Include="Meowbot\controllers\linebot_view.py" />
+    <Compile Include="Meowbot\databases\mongodb\group_manager.py" />
+    <Compile Include="Meowbot\databases\mongodb\user_manager.py" />
+    <Compile Include="Meowbot\register.py" />
+    <Compile Include="Meowbot\service.py" />
+    <Compile Include="Meowbot\services\meowai.py" />
+    <Compile Include="Meowbot\services\meowlibot\handlers\command.py" />
+    <Compile Include="Meowbot\services\meowlibot\handlers\message.py" />
+    <Compile Include="Meowbot\services\meowlibot\handlers\statistical.py" />
+    <Compile Include="Meowbot\services\template_chatgpt.py" />
+    <Compile Include="Meowbot\services\template_linebot.py" />
+    <Compile Include="Meowbot\services\meowlibot\meowlibot.py" />
+    <Compile Include="Meowbot\services\template_mongodb.py" />
     <Compile Include="Meowbot\__init__.py" />
     <Compile Include="program.py" />
     <Compile Include="settings.py" />
@@ -36,6 +49,11 @@
   <ItemGroup>
     <Folder Include="Meowbot\" />
     <Folder Include="Meowbot\controllers\" />
+    <Folder Include="Meowbot\databases\" />
+    <Folder Include="Meowbot\databases\mongodb\" />
+    <Folder Include="Meowbot\services\" />
+    <Folder Include="Meowbot\services\meowlibot\" />
+    <Folder Include="Meowbot\services\meowlibot\handlers\" />
     <Folder Include="Meowbot\static\" />
     <Folder Include="Meowbot\static\content\" />
     <Folder Include="Meowbot\static\fonts\" />

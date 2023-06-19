@@ -14,6 +14,9 @@ class MessageEventHandler(MessageEventHandlerTemplate):
     # [Abs:Override]
     def handle(self, event: MessageEvent):
 
+        print('Meowlibot Message Handler')
+        return
+
         # For 私聊時
         if event.source.type == 'user':
             pass
@@ -112,20 +115,26 @@ Things Event (物聯網事件)：
 class ThingsEventHandler(ThingsEventHandlerTemplate):
     pass
 
-# Service
-def meowlibot(api: LineBotApi) -> list:
-    return [
-        # 請參照 EventHandler 的順序
-        MessageEventHandler(api),
-        FollowEventHandler(api),
-        UnfollowEventHandler(api),
-        JoinEventHandler(api),
-        LeaveEventHandler(api),
-        MemberJoinedEventHandler(api),
-        MemberLeftEventHandler(api),
-        PostbackEventHandler(api),
-        BeaconEventHandler(api),
-        AccountLinkEventHandler(api),
-        ThingsEventHandler(api)
-        # More...
-    ]
+# 服務代理對象
+class Agent(AgentTemplate):
+
+    def __init__(self, svc_type: str) -> None:
+        super().__init__(svc_type)
+
+    # [Abs: Override]
+    def handlers(self, api: LineBotApi) -> list:
+        return [
+            # 請參照 template_linebot.py 中 EventHandler(Enum) 的順序
+            MessageEventHandler(api),
+            FollowEventHandler(api),
+            UnfollowEventHandler(api),
+            JoinEventHandler(api),
+            LeaveEventHandler(api),
+            MemberJoinedEventHandler(api),
+            MemberLeftEventHandler(api),
+            PostbackEventHandler(api),
+            BeaconEventHandler(api),
+            AccountLinkEventHandler(api),
+            ThingsEventHandler(api)
+            # More...
+        ]

@@ -3,7 +3,7 @@ from Meolask.meolask import Meolask
 from Meolask.template import RegisterTemplate
 from Meowbot.controllers.linebot_view import Service as LinebotService
 from Meowbot.service import MongoDbCtxType, ServiceType
-from Meowbot.services.meowlibot.meowlibot import meowlibot
+from Meowbot.services.meowlibot.meowlibot import Agent as LinebotAgent_Meowlibot
 
 from settings import (
     LINE_BOT_CHANNEL_ACCESS_TOKEN,
@@ -38,12 +38,15 @@ class Controllers(RegisterTemplate):
 
     # [Abs:Override]：注冊器
     def register(self, app: Meolask) -> None:
-        app.register_view(LinebotController, '/api/linebot/meowlibot', services = {
-            ServiceType.LinebotService:         # 索引值(用於查詢服務)
+        app.register_view(LinebotController, '/api/linebot', services = {
+            ServiceType.LinebotAgent_Meowlibot:         # 索引值(用於查詢服務)
             LinebotService(
-                LINE_BOT_CHANNEL_SECRET,        # Line-bot >> 密鑰
-                LINE_BOT_CHANNEL_ACCESS_TOKEN,  # Line-bot >> 訪問令牌(金鑰)
-                meowlibot                       # 提供服務的對象
+                LINE_BOT_CHANNEL_SECRET,                # Line-bot >> 密鑰
+                LINE_BOT_CHANNEL_ACCESS_TOKEN,          # Line-bot >> 訪問令牌(金鑰)
+                LinebotAgent_Meowlibot(                 # Agent >> 服務代理：提供服務的對象
+                    ServiceType.LinebotAgent_Meowlibot  # Agent >> 記錄索引值
+                )
             )
+            # More... LineBot-Agent
         })
         # More...

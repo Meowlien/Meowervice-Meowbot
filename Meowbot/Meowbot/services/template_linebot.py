@@ -10,17 +10,31 @@ from linebot.models import * # line 所提供的所有 事件定義
 from MeowkitPy.logging.logger import log
 from enum import Enum, auto
 
-class Service(ServiceTemplate):
-    def __init__(self, channel_secret: str, channel_access_token: str, handlers: list,
-        name: str=None) -> None:
-        super().__init__(name)
-        try:
-            self.handler = WebhookHandler(channel_secret)  # Line-bot >> 密鑰
-            self.api = LineBotApi(channel_access_token)    # Line-bot >> 訪問令牌(金鑰)
-            self.events = handlers(self.api)                  # 提供服務的對象
-        except Exception as e:
-            log.LogError(f'Linebot Fail! >> {e}')
+# Linebot 服務代理模板 >> 注冊 Linebot 服務時，可同代理者 (以實現彈性切換機器人服務)
+class AgentTemplate():
 
+    def __init__(self, svc_type: str) -> None:
+        self.service_type = svc_type
+
+    # [abstruct]
+    def handlers(self, api: LineBotApi) -> list:
+        pass
+
+# Linebot 服務 >> 注冊時創建
+class Service(ServiceTemplate):
+    def __init__(self, channel_secret: str, channel_access_token: str, agent: AgentTemplate, name: str=None) -> None:
+        super().__init__(name)
+        self.channel_secret = channel_secret                    # Line-bot >> 密鑰
+        self.channel_access_token = channel_access_token        # Line-bot >> 訪問令牌(金鑰)
+        self.agent = agent                                      # Agent >> 服務代理對象(Line機器人的靈魂)
+        try: # 嘗試執行
+            self.handler = WebhookHandler(self.channel_secret)  # Webhook 處理器
+            self.api = LineBotApi(self.channel_access_token)    # Line-Api >> 程式界面/接口
+            self.events = self.agent.handlers(self.api)         # Line-bot >> 事件處理器
+        except Exception as e: # 發生例外
+            log.LogError(f'Create Linebot Service Fail! >> {e}')
+
+# 事件執行器 清單
 class EventHandler(Enum):
     Message = 0
     Follow = auto()
@@ -34,6 +48,7 @@ class EventHandler(Enum):
     AccountLink = auto()
     Things = auto()
 
+# 事件執行器 模板
 class EventHandlerTemplate():
 
     def __init__(self, api: LineBotApi) -> None:
@@ -43,6 +58,9 @@ class EventHandlerTemplate():
     def handle(self, event: any):
         print(f'EventHandlerTemplate')
         pass
+
+# 事件執行器
+# -----------------------------------------------------
 
 class MessageEventHandlerTemplate(EventHandlerTemplate):
     # [abstruct]

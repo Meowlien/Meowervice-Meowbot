@@ -1,0 +1,3 @@
+D:\Waylon\Meowlien\Workspace\Projects\Meowervice-Meowbot\Meowbot\obj\Any CPU\Debug\Meowbot.pyproj.SuggestedBindingRedirects.cache
+D:\Waylon\Meowlien\Workspace\Projects\Meowervice-Meowbot\Meowbot\obj\Any CPU\Debug\Meowbot.pyproj.CoreCompileInputs.cache
+D:\Waylon\Meowlien\Workspace\Projects\Meowervice-Meowbot\Meowbot\Microsoft.PythonTools.WebRole.dll

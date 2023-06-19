@@ -16,7 +16,7 @@ class CommandType(Enum):
 # 處理邏輯
 # -----------------------------------------------------
 # For: 解析與執行命令
-def cmd_executor():
+def cmd_executor(cmd: str) -> str:
     pass
 
 

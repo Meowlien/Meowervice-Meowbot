@@ -13,8 +13,10 @@ from enum import Enum, auto
 # Linebot 服務代理模板 >> 注冊 Linebot 服務時，可同代理者 (以實現彈性切換機器人服務)
 class AgentTemplate():
 
-    def __init__(self, svc_type: str) -> None:
+    def __init__(self, svc_type: str, id: str='_id-xyz') -> None:
         self.service_type = svc_type
+        self.id = id
+        self.agent_id = self.service_type + self.id
 
     # [abstruct]
     def handlers(self, api: LineBotApi) -> list:

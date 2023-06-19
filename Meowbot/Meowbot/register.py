@@ -6,8 +6,12 @@ from Meowbot.service import MongoDbCtxType, ServiceType
 from Meowbot.services.meowlibot.meowlibot import Agent as LinebotAgent_Meowlibot
 
 from settings import (
-    LINE_BOT_CHANNEL_ACCESS_TOKEN,
-    LINE_BOT_CHANNEL_SECRET
+    # Meowlibot
+    LINE_BOT_AGENT_MEOWLIBOT_CHANNEL_ACCESS_TOKEN,
+    LINE_BOT_AGENT_MEOWLIBOT_CHANNEL_SECRET,
+    # Ali
+    LINE_BOT_AGENT_ALI_CHANNEL_ACCESS_TOKEN,
+    LINE_BOT_AGENT_ALI_CHANNEL_SECRET,
 )
 
 # 引入：資料庫上下文
@@ -39,14 +43,24 @@ class Controllers(RegisterTemplate):
     # [Abs:Override]：注冊器
     def register(self, app: Meolask) -> None:
         app.register_view(LinebotController, '/api/linebot', services = {
-            ServiceType.LinebotAgent_Meowlibot:         # 索引值(用於查詢服務)
+            ServiceType.LinebotAgent_Meowlibot:                     # 索引值(用於查詢服務)
             LinebotService(
-                LINE_BOT_CHANNEL_SECRET,                # Line-bot >> 密鑰
-                LINE_BOT_CHANNEL_ACCESS_TOKEN,          # Line-bot >> 訪問令牌(金鑰)
-                LinebotAgent_Meowlibot(                 # Agent >> 服務代理：提供服務的對象
-                    ServiceType.LinebotAgent_Meowlibot  # Agent >> 記錄索引值
+                LINE_BOT_AGENT_MEOWLIBOT_CHANNEL_SECRET,            # Line-bot >> 密鑰
+                LINE_BOT_AGENT_MEOWLIBOT_CHANNEL_ACCESS_TOKEN,      # Line-bot >> 訪問令牌(金鑰)
+                LinebotAgent_Meowlibot(                             # Agent >> 服務代理：提供服務的對象
+                    str(ServiceType.LinebotAgent_Meowlibot.name),   # Agent >> 記錄索引值
+                    '_id-gakl94gfdt5ynak6'                          # 代理者ID
                 )
-            )
-            # More... LineBot-Agent
+            ),
+            ServiceType.LinebotAgent_Ali:                           # 索引值(用於查詢服務)
+            LinebotService(
+                LINE_BOT_AGENT_ALI_CHANNEL_SECRET,                  # Line-bot >> 密鑰
+                LINE_BOT_AGENT_ALI_CHANNEL_ACCESS_TOKEN,            # Line-bot >> 訪問令牌(金鑰)
+                LinebotAgent_Meowlibot(                             # Agent >> 服務代理：提供服務的對象
+                    str(ServiceType.LinebotAgent_Ali.name),         # Agent >> 記錄索引值
+                    '_id-pnm56asjk45lkakl'                          # 代理者ID
+                )
+            ),
+             # More... LineBot-Agent
         })
         # More...

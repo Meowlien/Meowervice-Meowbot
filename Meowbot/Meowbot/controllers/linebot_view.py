@@ -11,6 +11,12 @@ from Meowbot.services.template_linebot import *
 from Meowbot.services.template_linebot import Service as LineBotSvc
 from Meowbot.databases.mongodb.user_manager import UserManager
 
+from settings import (
+    # Meowlibot
+    LINE_BOT_AGENT_MEOWLIBOT_CHANNEL_ACCESS_TOKEN,
+    LINE_BOT_AGENT_MEOWLIBOT_CHANNEL_SECRET,
+)
+
 def linebot_view(app: Meolask, url_prefix: str='/api/linebot', services: dict[str,ServiceTemplate]=None):
 
     # 參數設定
@@ -35,8 +41,8 @@ def linebot_view(app: Meolask, url_prefix: str='/api/linebot', services: dict[st
     路由： 由 Line Developers 中設定的 Webhook URL 來決定 API 路由
     '''
     # Meowbot 開放給 Line 機器人的 API 入口
-    @app.route(url_prefix + '/callback', methods=['POST'])
-    def callback():
+    @app.route(url_prefix + '/callback/<agent_id>', methods=['POST'])
+    def callback(agent_id: str):
         # 資料頭(Head)
         check_conditions = 'X-Line-Signature' # 檢查條件
         is_header_pass, headers = app.check_valid_data(request.headers, check_conditions)
@@ -57,17 +63,18 @@ def linebot_view(app: Meolask, url_prefix: str='/api/linebot', services: dict[st
         ):
             #channel_secret = request.headers['X-Line-ChannelSecret'] # Undone
             line_signature = headers['X-Line-Signature']
-
             # 嘗試執行
             try:
                 # 事件分發
-                if line_signature == 'test': EventHandlerTrigger('message')     # 測試：EventHandlerTrigger 自行分發
+                if line_signature == 'test':
+                    EventHandlerTrigger('message')     # 測試：EventHandlerTrigger 自行分發
+                    app.logger.info("Request data: " + request_data)
                 else:
-                    # Undone: 未解決辨認 來源對象身份辨認
-                    svc_linebot = next(iter(svc_linebots.items()))[1] # TMP
-                    svc_linebot.handler.handle(request_data, line_signature)  # 綫上：WebhookHandler 自動分發
-                app.logger.info("Request data: " + request_data)
-
+                    for svc_linebot in svc_linebots.values():
+                        if svc_linebot.agent.agent_id == agent_id:
+                            svc_linebot.handler.handle(request_data, line_signature)  # 綫上：WebhookHandler 自動分發
+                            app.logger.info("Request data: " + request_data)
+                            break
             # 捕獲例外
             except InvalidSignatureError:
                 abort(400) # 數位簽章驗證失敗，拒絕請求
@@ -81,7 +88,9 @@ def linebot_view(app: Meolask, url_prefix: str='/api/linebot', services: dict[st
 
     # 為所有 linebot 服務代理進行方法注冊
     for svc_linebot in svc_linebots.values():
-        log.LogInfomation(f'Registered (svc-linebotAgent) >> {svc_linebot.agent.service_type}')
+        log.LogInfomation(f'Registered (svc-linebotAgent) >> Agent_id = {svc_linebot.agent.agent_id}')
+
+        #BUG: 第二個會覆蓋第一個
 
         '''
         Message Event (消息事件)：
@@ -89,6 +98,7 @@ def linebot_view(app: Meolask, url_prefix: str='/api/linebot', services: dict[st
         '''
         @svc_linebot.handler.add(MessageEvent, message=TextMessage)
         def on_message_eventHandler(event: MessageEvent):
+            print(f'TEST >>>> {svc_linebot.agent.service_type}')
             svc: MessageEventHandlerTemplate = svc_linebot.events[EventHandler.Message.value]
             svc.handle(event)
 

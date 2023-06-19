@@ -13,9 +13,9 @@ class MessageEventHandler(MessageEventHandlerTemplate):
 
     # [Abs:Override]
     def handle(self, event: MessageEvent):
-
+        
         # 獲取：事件資料
-        group_id = event.source.group_id
+        #group_id = event.source.group_id
         user_id = event.source.user_id
 
         # 獲取：用戶資料(觸發者)
@@ -25,6 +25,8 @@ class MessageEventHandler(MessageEventHandlerTemplate):
 
 
         msg = event.message.text
+        print(f'Get: MessageEventHandler >> {msg}')
+
         if len(msg) > 0 and msg[0] == '#':
             reply_text = f'{display_name} >>\n' + event.message.text
             self.linebot_api.reply_message(
@@ -134,8 +136,8 @@ class ThingsEventHandler(ThingsEventHandlerTemplate):
 # 服務代理對象
 class Agent(AgentTemplate):
 
-    def __init__(self, svc_type: str) -> None:
-        super().__init__(svc_type)
+    def __init__(self, svc_type: str, id: str='_id-xyz') -> None:
+        super().__init__(svc_type, id)
 
     # [Abs: Override]
     def handlers(self, api: LineBotApi) -> list:

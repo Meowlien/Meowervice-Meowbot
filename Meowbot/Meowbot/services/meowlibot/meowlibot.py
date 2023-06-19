@@ -1,4 +1,4 @@
-﻿'''
+'''
 Meowlibot (阿里機器人)：
 事件執行處理器 >> [阿里機器人] 對於 Line 事件觸發後的響應行爲
 '''
@@ -14,9 +14,25 @@ class MessageEventHandler(MessageEventHandlerTemplate):
     # [Abs:Override]
     def handle(self, event: MessageEvent):
 
-        print('Meowlibot Message Handler')
-        return
+        # 獲取：事件資料
+        group_id = event.source.group_id
+        user_id = event.source.user_id
 
+        # 獲取：用戶資料(觸發者)
+        profile = self.linebot_api.get_profile(user_id)
+        display_name = profile.display_name # 用戶-名稱
+        picture_url = profile.picture_url   # 用戶-頭像 URL (非公開 = 空字串)
+
+
+        msg = event.message.text
+        if len(msg) > 0 and msg[0] == '#':
+            reply_text = f'{display_name} >>\n' + event.message.text
+            self.linebot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text=reply_text)
+            )
+
+        event.message
         # For 私聊時
         if event.source.type == 'user':
             pass
@@ -63,7 +79,7 @@ class MemberJoinedEventHandler(MemberJoinedEventHandlerTemplate):
 
     # [Abs:Override]
     def handle(self, event: MemberJoinedEvent):
-
+        return
         # 獲取：事件資料
         group_id = event.source.group_id
         user_id = event.source.user_id

@@ -90,14 +90,12 @@ def linebot_view(app: Meolask, url_prefix: str='/api/linebot', services: dict[st
     for svc_linebot in svc_linebots.values():
         log.LogInfomation(f'Registered (svc-linebotAgent) >> Agent_id = {svc_linebot.agent.agent_id}')
 
-        #BUG: 第二個會覆蓋第一個
-
         '''
         Message Event (消息事件)：
         當用戶發送消息時觸發 >> 可以根據不同類型的消息 (文本消息、圖像消息、視頻消息等) 進行相應的處理
         '''
         @svc_linebot.handler.add(MessageEvent, message=TextMessage)
-        def on_message_eventHandler(event: MessageEvent):
+        def on_message_eventHandler(event: MessageEvent, svc_linebot=svc_linebot):
             print(f'TEST >>>> {svc_linebot.agent.service_type}')
             svc: MessageEventHandlerTemplate = svc_linebot.events[EventHandler.Message.value]
             svc.handle(event)
@@ -107,7 +105,7 @@ def linebot_view(app: Meolask, url_prefix: str='/api/linebot', services: dict[st
         當使用者關注您的 Line Bot 時觸發 >> 可以發送歡迎消息或進行其他處理
         '''
         @svc_linebot.handler.add(FollowEvent)
-        def on_follow_eventHandler(event: FollowEvent):
+        def on_follow_eventHandler(event: FollowEvent, svc_linebot=svc_linebot):
             svc = svc_linebot.events[EventHandler.Follow.value]
             svc.handle(event)
 
@@ -116,7 +114,7 @@ def linebot_view(app: Meolask, url_prefix: str='/api/linebot', services: dict[st
         當使用者取消關注您的 Line Bot 時觸發 >> 可以進行相應的清理操作
         '''
         @svc_linebot.handler.add(UnfollowEvent)
-        def on_unfollow_eventHandler(event: UnfollowEvent):
+        def on_unfollow_eventHandler(event: UnfollowEvent, svc_linebot=svc_linebot):
             svc = svc_linebot.events[EventHandler.UnFollow.value]
             svc.handle(event)
 
@@ -125,7 +123,7 @@ def linebot_view(app: Meolask, url_prefix: str='/api/linebot', services: dict[st
         當 Bot 被邀請加入群組或聊天室時觸發 >> 可以發送歡迎消息或進行其他處理
         '''
         @svc_linebot.handler.add(JoinEvent)
-        def on_join_eventHandler(event: JoinEvent):
+        def on_join_eventHandler(event: JoinEvent, svc_linebot=svc_linebot):
             svc = svc_linebot.events[EventHandler.Join.value]
             svc.handle(event)
 
@@ -134,7 +132,7 @@ def linebot_view(app: Meolask, url_prefix: str='/api/linebot', services: dict[st
         當 Bot 被踢出群組或聊天室時觸發 >> 可以進行相應的清理操作
         '''
         @svc_linebot.handler.add(LeaveEvent)
-        def on_leave_eventHandler(event: LeaveEvent):
+        def on_leave_eventHandler(event: LeaveEvent, svc_linebot=svc_linebot):
             svc = svc_linebot.events[EventHandler.Leave.value]
             svc.handle(event)
 
@@ -143,7 +141,7 @@ def linebot_view(app: Meolask, url_prefix: str='/api/linebot', services: dict[st
         當有新成員加入 Line 群組或聊天室時會觸發該事件 >> 您可以透過此事件來偵測新成員的加入並做出相應的處理
         '''
         @svc_linebot.handler.add(MemberJoinedEvent)
-        def on_welcome_eventHandler(event: MemberJoinedEvent):
+        def on_welcome_eventHandler(event: MemberJoinedEvent, svc_linebot=svc_linebot):
             svc = svc_linebot.events[EventHandler.MemberJoin.value]
             svc.handle(event)
 
@@ -152,7 +150,7 @@ def linebot_view(app: Meolask, url_prefix: str='/api/linebot', services: dict[st
         當有成員離開 Line 群組或聊天室時會觸發該事件 >> 您可以透過此事件來偵測成員的離開並做出相應的處理
         '''
         @svc_linebot.handler.add(MemberLeftEvent)
-        def on_byebye_eventHandler(event: MemberLeftEvent):
+        def on_byebye_eventHandler(event: MemberLeftEvent, svc_linebot=svc_linebot):
             svc = svc_linebot.events[EventHandler.MemberLeft.value]
             svc.handle(event)
 
@@ -161,7 +159,7 @@ def linebot_view(app: Meolask, url_prefix: str='/api/linebot', services: dict[st
         當使用者在 Line Bot 上進行特定操作 (例如點擊按鈕) 後觸發 >> 可以根據不同的回傳資料進行相應的處理
         '''
         @svc_linebot.handler.add(PostbackEvent)
-        def on_postback_eventHandler(event: PostbackEvent):
+        def on_postback_eventHandler(event: PostbackEvent, svc_linebot=svc_linebot):
             svc = svc_linebot.events[EventHandler.Postback.value]
             svc.handle(event)
 
@@ -170,7 +168,7 @@ def linebot_view(app: Meolask, url_prefix: str='/api/linebot', services: dict[st
         當設備附近的信標被檢測到時觸發 >> 可以根據信標的 ID 或 類型 進行相應的處理
         '''
         @svc_linebot.handler.add(BeaconEvent)
-        def on_beacon_eventHandler(event: BeaconEvent):
+        def on_beacon_eventHandler(event: BeaconEvent, svc_linebot=svc_linebot):
             svc = svc_linebot.events[EventHandler.Beacon.value]
             svc.handle(event)
 
@@ -179,7 +177,7 @@ def linebot_view(app: Meolask, url_prefix: str='/api/linebot', services: dict[st
         當使用者在 Line Bot 中請求與其外部帳號 (例如:Line Login) 進行關聯時觸發 >> 可以進行帳號關聯的處理
         '''
         @svc_linebot.handler.add(AccountLinkEvent)
-        def on_accountLink_eventHandler(event: AccountLinkEvent):
+        def on_accountLink_eventHandler(event: AccountLinkEvent, svc_linebot=svc_linebot):
             svc = svc_linebot.events[EventHandler.AccountLink.value]
             svc.handle(event)
 
@@ -188,7 +186,7 @@ def linebot_view(app: Meolask, url_prefix: str='/api/linebot', services: dict[st
         與 Line 的物聯網平台連接時觸發的事件 >> 可以與物聯網設備進行互動和控制
         '''
         @svc_linebot.handler.add(ThingsEvent)
-        def on_things_eventHandler(event: ThingsEvent):
+        def on_things_eventHandler(event: ThingsEvent, svc_linebot=svc_linebot):
             svc = svc_linebot.events[EventHandler.Things.value]
             svc.handle(event)
 

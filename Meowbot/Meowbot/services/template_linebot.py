@@ -26,6 +26,8 @@ class AgentTemplate():
 
 # Linebot 服務 >> 注冊時創建
 class Service(ServiceTemplate):
+
+    # 建構式
     def __init__(self, channel_secret: str, channel_access_token: str, agent: AgentTemplate, name: str=None) -> None:
         super().__init__(name)
         self.channel_secret = channel_secret                    # Line-bot >> 密鑰
@@ -37,7 +39,8 @@ class Service(ServiceTemplate):
             self.events = self.agent.handlers(self.api)         # Line-bot >> 事件處理器
         except Exception as e: # 發生例外
             log.LogError(f'Create Linebot Service Fail! >> {e}')
-
+    
+    # 為執行器添加參數
     def handler_add_svc_linebot(self, args: list=None):
         def decorator(func):
             @functools.wraps(func)

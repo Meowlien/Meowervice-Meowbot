@@ -90,99 +90,109 @@ def linebot_view(app: Meolask, url_prefix: str='/api/linebot', services: dict[st
         '''
         @svc_linebot.handler.add(MessageEvent, message=TextMessage)
         @svc_linebot.handler_add_svc_linebot(args=None)
-        def on_message_eventHandler(event: MessageEvent, linebot: LineBotSvc, args: list):
-            svc: MessageEventHandlerTemplate = linebot.events[EventHandler.Message.value]
-            svc.handle(event)
+        def on_message_eventHandler(event: MessageEvent, linebot: LineBotSvc, args: list=None):
+            handler: MessageEventHandlerTemplate = linebot.events[EventHandler.Message.value]
+            handler.handle(event)
 
         '''
         Follow Event (關注事件)：
         當使用者關注您的 Line Bot 時觸發 >> 可以發送歡迎消息或進行其他處理
         '''
         @svc_linebot.handler.add(FollowEvent)
-        def on_follow_eventHandler(event: FollowEvent, svc_linebot=svc_linebot):
-            svc = svc_linebot.events[EventHandler.Follow.value]
-            svc.handle(event)
+        @svc_linebot.handler_add_svc_linebot(args=None)
+        def on_follow_eventHandler(event: FollowEvent, linebot: LineBotSvc, args: list=None):
+            handler: FollowEventHandlerTemplate = linebot.events[EventHandler.Follow.value]
+            handler.handle(event)
 
         '''
         Unfollow Event (取消關注事件)：
         當使用者取消關注您的 Line Bot 時觸發 >> 可以進行相應的清理操作
         '''
         @svc_linebot.handler.add(UnfollowEvent)
-        def on_unfollow_eventHandler(event: UnfollowEvent, svc_linebot=svc_linebot):
-            svc = svc_linebot.events[EventHandler.UnFollow.value]
-            svc.handle(event)
+        @svc_linebot.handler_add_svc_linebot(args=None)
+        def on_unfollow_eventHandler(event: UnfollowEvent, linebot: LineBotSvc, args: list=None):
+            handler: UnfollowEventHandlerTemplate = linebot.events[EventHandler.UnFollow.value]
+            handler.handle(event)
 
         '''
         Join Event (加入群組/聊天室事件)：
         當 Bot 被邀請加入群組或聊天室時觸發 >> 可以發送歡迎消息或進行其他處理
         '''
         @svc_linebot.handler.add(JoinEvent)
-        def on_join_eventHandler(event: JoinEvent, svc_linebot=svc_linebot):
-            svc = svc_linebot.events[EventHandler.Join.value]
-            svc.handle(event)
+        @svc_linebot.handler_add_svc_linebot(args=None)
+        def on_join_eventHandler(event: JoinEvent, linebot: LineBotSvc, args: list=None):
+            handler: JoinEventHandlerTemplate = linebot.events[EventHandler.Join.value]
+            handler.handle(event)
 
         '''
         Leave Event (離開群組/聊天室事件)：
         當 Bot 被踢出群組或聊天室時觸發 >> 可以進行相應的清理操作
         '''
         @svc_linebot.handler.add(LeaveEvent)
-        def on_leave_eventHandler(event: LeaveEvent, svc_linebot=svc_linebot):
-            svc = svc_linebot.events[EventHandler.Leave.value]
-            svc.handle(event)
+        @svc_linebot.handler_add_svc_linebot(args=None)
+        def on_leave_eventHandler(event: LeaveEvent, linebot: LineBotSvc, args: list=None):
+            handler: LeaveEventHandlerTemplate = linebot.events[EventHandler.Leave.value]
+            handler.handle(event)
 
         '''
         Member Join Event (成員加入事件)：
         當有新成員加入 Line 群組或聊天室時會觸發該事件 >> 您可以透過此事件來偵測新成員的加入並做出相應的處理
         '''
         @svc_linebot.handler.add(MemberJoinedEvent)
-        def on_welcome_eventHandler(event: MemberJoinedEvent, svc_linebot=svc_linebot):
-            svc = svc_linebot.events[EventHandler.MemberJoin.value]
-            svc.handle(event)
+        @svc_linebot.handler_add_svc_linebot(args=None)
+        def on_welcome_eventHandler(event: MemberJoinedEvent, linebot: LineBotSvc, args: list=None):
+            handler: MemberJoinedEventHandlerTemplate = linebot.events[EventHandler.MemberJoin.value]
+            handler.handle(event)
 
         '''
         Member Left Event (成員離開事件)：
         當有成員離開 Line 群組或聊天室時會觸發該事件 >> 您可以透過此事件來偵測成員的離開並做出相應的處理
         '''
         @svc_linebot.handler.add(MemberLeftEvent)
-        def on_byebye_eventHandler(event: MemberLeftEvent, svc_linebot=svc_linebot):
-            svc = svc_linebot.events[EventHandler.MemberLeft.value]
-            svc.handle(event)
+        @svc_linebot.handler_add_svc_linebot(args=None)
+        def on_byebye_eventHandler(event: MemberLeftEvent, linebot: LineBotSvc, args: list=None):
+            handler: MemberLeftEventHandlerTemplate = linebot.events[EventHandler.MemberLeft.value]
+            handler.handle(event)
 
         '''
         Postback Event (回傳事件)：
         當使用者在 Line Bot 上進行特定操作 (例如點擊按鈕) 後觸發 >> 可以根據不同的回傳資料進行相應的處理
         '''
         @svc_linebot.handler.add(PostbackEvent)
-        def on_postback_eventHandler(event: PostbackEvent, svc_linebot=svc_linebot):
-            svc = svc_linebot.events[EventHandler.Postback.value]
-            svc.handle(event)
+        @svc_linebot.handler_add_svc_linebot(args=None)
+        def on_postback_eventHandler(event: PostbackEvent, linebot: LineBotSvc, args: list=None):
+            handler: PostbackEventHandlerTemplate = linebot.events[EventHandler.Postback.value]
+            handler.handle(event)
 
         '''
         Beacon Event (信標事件)：
         當設備附近的信標被檢測到時觸發 >> 可以根據信標的 ID 或 類型 進行相應的處理
         '''
         @svc_linebot.handler.add(BeaconEvent)
-        def on_beacon_eventHandler(event: BeaconEvent, svc_linebot=svc_linebot):
-            svc = svc_linebot.events[EventHandler.Beacon.value]
-            svc.handle(event)
+        @svc_linebot.handler_add_svc_linebot(args=None)
+        def on_beacon_eventHandler(event: BeaconEvent, linebot: LineBotSvc, args: list=None):
+            handler: BeaconEventHandlerTemplate = linebot.events[EventHandler.Beacon.value]
+            handler.handle(event)
 
         '''
         Account Link Event (帳號連結事件)：
         當使用者在 Line Bot 中請求與其外部帳號 (例如:Line Login) 進行關聯時觸發 >> 可以進行帳號關聯的處理
         '''
         @svc_linebot.handler.add(AccountLinkEvent)
-        def on_accountLink_eventHandler(event: AccountLinkEvent, svc_linebot=svc_linebot):
-            svc = svc_linebot.events[EventHandler.AccountLink.value]
-            svc.handle(event)
+        @svc_linebot.handler_add_svc_linebot(args=None)
+        def on_accountLink_eventHandler(event: AccountLinkEvent, linebot: LineBotSvc, args: list=None):
+            handler: AccountLinkEventHandlerTemplate = linebot.events[EventHandler.AccountLink.value]
+            handler.handle(event)
 
         '''
         Things Event (物聯網事件)：
         與 Line 的物聯網平台連接時觸發的事件 >> 可以與物聯網設備進行互動和控制
         '''
         @svc_linebot.handler.add(ThingsEvent)
-        def on_things_eventHandler(event: ThingsEvent, svc_linebot=svc_linebot):
-            svc = svc_linebot.events[EventHandler.Things.value]
-            svc.handle(event)
+        @svc_linebot.handler_add_svc_linebot(args=None)
+        def on_things_eventHandler(event: ThingsEvent, linebot: LineBotSvc, args: list=None):
+            handler: ThingsEventHandlerTemplate = linebot.events[EventHandler.Things.value]
+            handler.handle(event)
 
         '''
         [當前版本: 處理器添加變數名稱不確定]

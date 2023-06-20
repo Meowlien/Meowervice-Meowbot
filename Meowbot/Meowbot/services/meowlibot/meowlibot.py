@@ -138,21 +138,25 @@ class Agent(AgentTemplate):
 
     def __init__(self, svc_type: str, id: str='_id-xyz') -> None:
         super().__init__(svc_type, id)
+        self.event_handlers: list = None
 
     # [Abs: Override]
     def handlers(self, api: LineBotApi) -> list:
-        return [
-            # 請參照 template_linebot.py 中 EventHandler(Enum) 的順序
-            MessageEventHandler(api),
-            FollowEventHandler(api),
-            UnfollowEventHandler(api),
-            JoinEventHandler(api),
-            LeaveEventHandler(api),
-            MemberJoinedEventHandler(api),
-            MemberLeftEventHandler(api),
-            PostbackEventHandler(api),
-            BeaconEventHandler(api),
-            AccountLinkEventHandler(api),
-            ThingsEventHandler(api)
-            # More...
-        ]
+        if self.event_handlers is None:
+            self.event_handlers = [
+                # 請參照 template_linebot.py 中 EventHandler(Enum) 的順序
+                MessageEventHandler(api),
+                FollowEventHandler(api),
+                UnfollowEventHandler(api),
+                JoinEventHandler(api),
+                LeaveEventHandler(api),
+                MemberJoinedEventHandler(api),
+                MemberLeftEventHandler(api),
+                PostbackEventHandler(api),
+                BeaconEventHandler(api),
+                AccountLinkEventHandler(api),
+                ThingsEventHandler(api)
+                # More...
+            ]
+
+        return self.event_handlers

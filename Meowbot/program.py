@@ -25,3 +25,14 @@ if __name__ == '__main__':
     HOST = config.HOST
     PORT = config.PORT
     app.run(HOST, PORT)
+
+
+    #from Meowbot.services.meowlibot.handlers.command import *
+    #from Meowbot.services.meowlibot.handlers.message import *
+    #from linebot import LineBotApi
+    #cmd = Command()
+
+    #callback(cmd)
+    #cmd.handle(LineBotApi, '#imitate a')
+    #cmd.handle(LineBotApi, '#dosomething a')
+

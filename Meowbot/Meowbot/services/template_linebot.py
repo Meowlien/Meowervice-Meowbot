@@ -9,6 +9,8 @@ from linebot.exceptions import InvalidSignatureError
 from linebot.models import * # line 所提供的所有 事件定義
 from MeowkitPy.logging.logger import log
 from enum import Enum, auto
+import functools
+import typing
 
 # Linebot 服務代理模板 >> 注冊 Linebot 服務時，可同代理者 (以實現彈性切換機器人服務)
 class AgentTemplate():
@@ -35,6 +37,14 @@ class Service(ServiceTemplate):
             self.events = self.agent.handlers(self.api)         # Line-bot >> 事件處理器
         except Exception as e: # 發生例外
             log.LogError(f'Create Linebot Service Fail! >> {e}')
+
+    def handler_add_svc_linebot(self, args: list=None):
+        def decorator(func):
+            @functools.wraps(func)
+            def wrapper(event):
+                return func(event, self, args)
+            return wrapper
+        return decorator
 
 # 事件執行器 清單
 class EventHandler(Enum):

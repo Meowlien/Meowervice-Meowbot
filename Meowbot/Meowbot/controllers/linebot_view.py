@@ -11,12 +11,6 @@ from Meowbot.services.template_linebot import *
 from Meowbot.services.template_linebot import Service as LineBotSvc
 from Meowbot.databases.mongodb.user_manager import UserManager
 
-from settings import (
-    # Meowlibot
-    LINE_BOT_AGENT_MEOWLIBOT_CHANNEL_ACCESS_TOKEN,
-    LINE_BOT_AGENT_MEOWLIBOT_CHANNEL_SECRET,
-)
-
 def linebot_view(app: Meolask, url_prefix: str='/api/linebot', services: dict[str,ServiceTemplate]=None):
 
     # 參數設定
@@ -87,7 +81,7 @@ def linebot_view(app: Meolask, url_prefix: str='/api/linebot', services: dict[st
     # -----------------------------------------------------
 
     # 為所有 linebot 服務代理進行方法注冊
-    for svc_linebot in svc_linebots.values():
+    for svc_linebot_key, svc_linebot in svc_linebots.items():
         log.LogInfomation(f'Registered (svc-linebotAgent) >> Agent_id = {svc_linebot.agent.agent_id}')
 
         '''
@@ -95,9 +89,9 @@ def linebot_view(app: Meolask, url_prefix: str='/api/linebot', services: dict[st
         當用戶發送消息時觸發 >> 可以根據不同類型的消息 (文本消息、圖像消息、視頻消息等) 進行相應的處理
         '''
         @svc_linebot.handler.add(MessageEvent, message=TextMessage)
-        def on_message_eventHandler(event: MessageEvent, svc_linebot=svc_linebot):
-            print(f'TEST >>>> {svc_linebot.agent.service_type}')
-            svc: MessageEventHandlerTemplate = svc_linebot.events[EventHandler.Message.value]
+        @svc_linebot.handler_add_svc_linebot(args=None)
+        def on_message_eventHandler(event: MessageEvent, linebot: LineBotSvc, args: list):
+            svc: MessageEventHandlerTemplate = linebot.events[EventHandler.Message.value]
             svc.handle(event)
 
         '''

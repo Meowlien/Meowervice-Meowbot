@@ -16,11 +16,31 @@ import typing
 class AgentTemplate():
 
     def __init__(self, svc_type: str, id: str='_id-xyz') -> None:
-        self.service_type = svc_type
-        self.id = id
-        self.agent_id = self.service_type + self.id
+        self.service_type = svc_type                    # 代理對象(可以看作是名稱，但同一個名稱可能有很多個實例)
+        self.id = id                                    # 對象實例(同一個代理模型，不同實例下的id)
+        self.agent_id = self.service_type + self.id     # 代理對象唯一識別符
+        self.handlers: dict = None                      # 執行器
 
-    # [abstruct]
+    # [virtual]: 緩存代理實例
+    @staticmethod # 靜態函式
+    def __add_instance(key: str, obj) -> list:
+        pass
+
+    # [virtual]: 獲取代理實例
+    @staticmethod # 靜態函式
+    def get_instance(key: str):
+        pass
+
+    # [virtual]: 構建執行器清單
+    def build_handlers(self, args: list):
+        pass
+
+    # 獲取執行器
+    def get_handler(self, key: str):
+        return self.handlers.get(key, None)
+
+    # [virtual]
+    @staticmethod # 靜態函式
     def handlers(self, api: LineBotApi) -> list:
         pass
 

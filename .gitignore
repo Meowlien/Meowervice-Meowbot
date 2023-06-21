@@ -125,3 +125,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Others
+Meowbot/Settings.ini
+/Settings.ini

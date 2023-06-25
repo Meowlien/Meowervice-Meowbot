@@ -3,6 +3,6 @@ from Meolask.template import ServiceTemplate
 
 class MongoDbCtxTemplate(ServiceTemplate):
     
-    def __init__(self, client: MongoClient, name: str=None) -> None:
-        super().__init__(name)
+    def __init__(self, client: MongoClient, id: str, name: str=None) -> None:
+        super().__init__(id, name)
         self._client = client

@@ -4,7 +4,92 @@ Meowlibot (阿里機器人)：
 '''
 from MeowkitPy.data.validation import list_filter
 from Meowbot.services.template_linebot import *
-from Meowbot.services.meowlibot.handlers.message import *
+from Meowbot.services.meowlibot.handlers.message import instructions as msg_instructions
+
+
+# 服務代理對象
+class Agent(AgentTemplate):
+
+    _instances: dict[str, AgentTemplate] = {}
+
+    def __init__(self, svc_type: str, id: str='_id-xyz') -> None:
+        super().__init__(svc_type, id)
+        Agent.__add_instance(id, self)
+
+    # [Override]
+    @staticmethod
+    def __add_instance(key: str, obj) -> list:
+        if isinstance(obj, Agent):
+            Agent._instances[key] = obj
+
+    # [Override]
+    @staticmethod
+    def get_instance(key: str):
+        agent: Agent = Agent._instances.get(key, None)
+        return agent
+
+    # [Override]：創建執行器
+    def build_handlers(self, args: list):
+
+        # 參數檢查
+        linebot_api: LineBotApi = list_filter(args, LineBotApi, uniqueness=True)
+        if linebot_api is None:
+            # 創建 handlers 失敗(原因：沒有創建 handles 時的必要參數)
+            log.LogError('Build Handler Fail >> No required parameters >> LinebotApi')
+            return
+
+        # 緩存參數
+        self.api = linebot_api
+
+        # 創建 handlers
+        self.handlers = {
+            EventHandler.Message.name:       MessageEventHandler(self.api),
+            EventHandler.Follow.name:        FollowEventHandler(self.api),
+            EventHandler.UnFollow.name:      UnfollowEventHandler(self.api),
+            EventHandler.Join.name:          JoinEventHandler(self.api),
+            EventHandler.Leave.name:         LeaveEventHandler(self.api),
+            EventHandler.MemberJoin.name:    MemberJoinedEventHandler(self.api),
+            EventHandler.MemberLeft.name:    MemberLeftEventHandler(self.api),
+            EventHandler.Postback.name:      PostbackEventHandler(self.api),
+            EventHandler.Beacon.name:        BeaconEventHandler(self.api),
+            EventHandler.AccountLink.name:   AccountLinkEventHandler(self.api),
+            EventHandler.Things.name:        ThingsEventHandler(self.api),
+        }
+
+# 指令集
+class Command(CommandTemplate):
+
+    # [abstruct]: 解析指令
+    '''
+    param: args >> sliced:bool
+    '''
+    def _parse(self, msg: str, args: dict[str,any]=None) -> tuple[list[str], str]:
+
+        # 參數設定
+        arg_sliced: bool = True
+        if args is not None:
+            arg_sliced = args.get('sliced', False)
+
+        # 長度不符最低解析標準 >> 3位字元
+        if len(msg) <= 2:
+            return None, f'Command Parse Fail! >> At least 3 length >> {msg}'
+
+        # 指令的第一個字元必須爲 #
+        if msg[0] != '#':
+            return None, f'Command Parse Fail! >> First char should be # >> {msg}'
+
+        # 是否將語句切片
+        if arg_sliced == True:
+            # 指令判定失敗(不是指令 or 語法錯誤)
+            tokens = msg.split() # 以空格分割
+            if len(tokens) == 1:
+                return None, f'Command Parse Fail! >> Syntax Error >> {msg}'
+
+            # 切片處理
+            return tokens, 'pass'
+
+        # 維持(以表示解析 即便不切片 也通過)
+        return msg, 'pass'
 
 '''
 Message Event (消息事件)：
@@ -12,37 +97,44 @@ Message Event (消息事件)：
 '''
 class MessageEventHandler(MessageEventHandlerTemplate):
 
+    def __init__(self, api: LineBotApi) -> None:
+        super().__init__(api, Command())
+        # 指令集注冊
+        self.command_register(msg_instructions)
+
+
     # [Abs:Override]
     def handle(self, event: MessageEvent):
-        
-        # 獲取：事件資料
-        #group_id = event.source.group_id
-        user_id = event.source.user_id
+        self.command.handle(self.linebot_api, event, event.message.text)
 
-        # 獲取：用戶資料(觸發者)
-        profile = self.linebot_api.get_profile(user_id)
-        display_name = profile.display_name # 用戶-名稱
-        picture_url = profile.picture_url   # 用戶-頭像 URL (非公開 = 空字串)
+        ## 獲取：事件資料
+        ##group_id = event.source.group_id
+        #user_id = event.source.user_id
+
+        ## 獲取：用戶資料(觸發者)
+        #profile = self.linebot_api.get_profile(user_id)
+        #display_name = profile.display_name # 用戶-名稱
+        #picture_url = profile.picture_url   # 用戶-頭像 URL (非公開 = 空字串)
 
 
-        msg = event.message.text
-        print(f'Get: MessageEventHandler >> {msg}')
+        #msg = event.message.text
+        #print(f'Get: MessageEventHandler >> {msg}')
 
-        if len(msg) > 0 and msg[0] == '#':
-            reply_text = f'{display_name} >>\n' + event.message.text
-            self.linebot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text=reply_text)
-            )
+        #if len(msg) > 0 and msg[0] == '#':
+        #    reply_text = f'{display_name} >>\n' + event.message.text
+        #    self.linebot_api.reply_message(
+        #        event.reply_token,
+        #        TextSendMessage(text=reply_text)
+        #    )
 
-        event.message
-        # For 私聊時
-        if event.source.type == 'user':
-            pass
+        #event.message
+        ## For 私聊時
+        #if event.source.type == 'user':
+        #    pass
 
-        # For 群聊時
-        if event.source.type == 'group':
-            pass
+        ## For 群聊時
+        #if event.source.type == 'group':
+        #    pass
 
         pass
 
@@ -133,78 +225,4 @@ Things Event (物聯網事件)：
 '''
 class ThingsEventHandler(ThingsEventHandlerTemplate):
     pass
-
-# 服務代理對象
-class Agent(AgentTemplate):
-
-    _instances: dict[str, AgentTemplate] = {}
-
-    def __init__(self, svc_type: str, id: str='_id-xyz') -> None:
-        super().__init__(svc_type, id)
-        Agent.__add_instance(id, self)
-
-    # [Override]
-    @staticmethod
-    def __add_instance(key: str, obj) -> list:
-        if isinstance(obj, Agent):
-            Agent._instances[key] = obj
-
-    # [Override]
-    @staticmethod
-    def get_instance(key: str):
-        agent: Agent = Agent._instances.get(key, None)
-        return agent
-
-    # [Override]
-    def build_handlers(self, args: list):
-
-        # 參數檢查
-        linebot_api: LineBotApi = list_filter(self.handlers, LineBotApi, only=True)
-        if linebot_api is None:
-            # 創建 handlers 失敗(原因：沒有創建 handles 時的必要參數)
-            log.LogError('Build Handler Fail >> No required parameters >> LinebotApi')
-            return
-
-        # 緩存參數
-        self.api = linebot_api
-
-        # 創建 handlers
-        self.handlers = {
-            EventHandler.Message.name:       MessageEventHandler(self.api),
-            EventHandler.Follow.name:        FollowEventHandler(self.api),
-            EventHandler.UnFollow.name:      UnfollowEventHandler(self.api),
-            EventHandler.Join.name:          JoinEventHandler(self.api),
-            EventHandler.Leave.name:         LeaveEventHandler(self.api),
-            EventHandler.MemberJoin.name:    MemberJoinedEventHandler(self.api),
-            EventHandler.MemberLeft.name:    MemberLeftEventHandler(self.api),
-            EventHandler.Postback.name:      PostbackEventHandler(self.api),
-            EventHandler.Beacon.name:        BeaconEventHandler(self.api),
-            EventHandler.AccountLink.name:   AccountLinkEventHandler(self.api),
-            EventHandler.Things.name:        ThingsEventHandler(self.api),
-        }
-
-
-
-    # [Override]
-    def handlers(self, api: LineBotApi) -> list:
-        if self.handlers is None:
-            # BUG, self.handlers 是 dict 不是 list
-            self.handlers = [
-                # 請參照 template_linebot.py 中 EventHandler(Enum) 的順序
-                MessageEventHandler(api),
-                FollowEventHandler(api),
-                UnfollowEventHandler(api),
-                JoinEventHandler(api),
-                LeaveEventHandler(api),
-                MemberJoinedEventHandler(api),
-                MemberLeftEventHandler(api),
-                PostbackEventHandler(api),
-                BeaconEventHandler(api),
-                AccountLinkEventHandler(api),
-                ThingsEventHandler(api)
-                # More...
-            ]
-
-        return self.event_handlers
-
 

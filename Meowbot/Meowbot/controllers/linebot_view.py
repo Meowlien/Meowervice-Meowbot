@@ -79,10 +79,9 @@ def linebot_view(app: Meolask, url_prefix: str='/api/linebot', services: dict[st
 
     # For 事件
     # -----------------------------------------------------
-
     # 為所有 linebot 服務代理進行方法注冊
     for svc_linebot_key, svc_linebot in svc_linebots.items():
-        log.LogInfomation(f'Registered (svc-linebotAgent) >> Agent_id = {svc_linebot.agent.agent_id}')
+        #log.LogInfomation(f'Registered (svc-linebotAgent) >> Agent_id = {svc_linebot.agent.agent_id}')
 
         '''
         Message Event (消息事件)：
@@ -91,7 +90,7 @@ def linebot_view(app: Meolask, url_prefix: str='/api/linebot', services: dict[st
         @svc_linebot.handler.add(MessageEvent, message=TextMessage)
         @svc_linebot.handler_add_svc_linebot(args=None)
         def on_message_eventHandler(event: MessageEvent, linebot: LineBotSvc, args: list=None):
-            handler: MessageEventHandlerTemplate = linebot.events[EventHandler.Message.value]
+            handler: MessageEventHandlerTemplate = linebot.agent.get_handler(EventHandler.Message.name)
             handler.handle(event)
 
         '''
@@ -101,7 +100,7 @@ def linebot_view(app: Meolask, url_prefix: str='/api/linebot', services: dict[st
         @svc_linebot.handler.add(FollowEvent)
         @svc_linebot.handler_add_svc_linebot(args=None)
         def on_follow_eventHandler(event: FollowEvent, linebot: LineBotSvc, args: list=None):
-            handler: FollowEventHandlerTemplate = linebot.events[EventHandler.Follow.value]
+            handler: FollowEventHandlerTemplate = linebot.agent.get_handler(EventHandler.Follow.name)
             handler.handle(event)
 
         '''
@@ -111,7 +110,7 @@ def linebot_view(app: Meolask, url_prefix: str='/api/linebot', services: dict[st
         @svc_linebot.handler.add(UnfollowEvent)
         @svc_linebot.handler_add_svc_linebot(args=None)
         def on_unfollow_eventHandler(event: UnfollowEvent, linebot: LineBotSvc, args: list=None):
-            handler: UnfollowEventHandlerTemplate = linebot.events[EventHandler.UnFollow.value]
+            handler: UnfollowEventHandlerTemplate = linebot.agent.get_handler(EventHandler.UnFollow.name)
             handler.handle(event)
 
         '''
@@ -121,7 +120,7 @@ def linebot_view(app: Meolask, url_prefix: str='/api/linebot', services: dict[st
         @svc_linebot.handler.add(JoinEvent)
         @svc_linebot.handler_add_svc_linebot(args=None)
         def on_join_eventHandler(event: JoinEvent, linebot: LineBotSvc, args: list=None):
-            handler: JoinEventHandlerTemplate = linebot.events[EventHandler.Join.value]
+            handler: JoinEventHandlerTemplate = linebot.agent.get_handler(EventHandler.Join.name)
             handler.handle(event)
 
         '''
@@ -131,7 +130,7 @@ def linebot_view(app: Meolask, url_prefix: str='/api/linebot', services: dict[st
         @svc_linebot.handler.add(LeaveEvent)
         @svc_linebot.handler_add_svc_linebot(args=None)
         def on_leave_eventHandler(event: LeaveEvent, linebot: LineBotSvc, args: list=None):
-            handler: LeaveEventHandlerTemplate = linebot.events[EventHandler.Leave.value]
+            handler: LeaveEventHandlerTemplate = linebot.agent.get_handler(EventHandler.Leave.name)
             handler.handle(event)
 
         '''
@@ -141,7 +140,7 @@ def linebot_view(app: Meolask, url_prefix: str='/api/linebot', services: dict[st
         @svc_linebot.handler.add(MemberJoinedEvent)
         @svc_linebot.handler_add_svc_linebot(args=None)
         def on_welcome_eventHandler(event: MemberJoinedEvent, linebot: LineBotSvc, args: list=None):
-            handler: MemberJoinedEventHandlerTemplate = linebot.events[EventHandler.MemberJoin.value]
+            handler: MemberJoinedEventHandlerTemplate = linebot.agent.get_handler(EventHandler.MemberJoin.name)
             handler.handle(event)
 
         '''
@@ -151,7 +150,7 @@ def linebot_view(app: Meolask, url_prefix: str='/api/linebot', services: dict[st
         @svc_linebot.handler.add(MemberLeftEvent)
         @svc_linebot.handler_add_svc_linebot(args=None)
         def on_byebye_eventHandler(event: MemberLeftEvent, linebot: LineBotSvc, args: list=None):
-            handler: MemberLeftEventHandlerTemplate = linebot.events[EventHandler.MemberLeft.value]
+            handler: MemberLeftEventHandlerTemplate = linebot.agent.get_handler(EventHandler.MemberLeft.name)
             handler.handle(event)
 
         '''
@@ -161,7 +160,7 @@ def linebot_view(app: Meolask, url_prefix: str='/api/linebot', services: dict[st
         @svc_linebot.handler.add(PostbackEvent)
         @svc_linebot.handler_add_svc_linebot(args=None)
         def on_postback_eventHandler(event: PostbackEvent, linebot: LineBotSvc, args: list=None):
-            handler: PostbackEventHandlerTemplate = linebot.events[EventHandler.Postback.value]
+            handler: PostbackEventHandlerTemplate = linebot.agent.get_handler(EventHandler.Postback.name)
             handler.handle(event)
 
         '''
@@ -171,7 +170,7 @@ def linebot_view(app: Meolask, url_prefix: str='/api/linebot', services: dict[st
         @svc_linebot.handler.add(BeaconEvent)
         @svc_linebot.handler_add_svc_linebot(args=None)
         def on_beacon_eventHandler(event: BeaconEvent, linebot: LineBotSvc, args: list=None):
-            handler: BeaconEventHandlerTemplate = linebot.events[EventHandler.Beacon.value]
+            handler: BeaconEventHandlerTemplate = linebot.agent.get_handler(EventHandler.Beacon.name)
             handler.handle(event)
 
         '''
@@ -181,7 +180,7 @@ def linebot_view(app: Meolask, url_prefix: str='/api/linebot', services: dict[st
         @svc_linebot.handler.add(AccountLinkEvent)
         @svc_linebot.handler_add_svc_linebot(args=None)
         def on_accountLink_eventHandler(event: AccountLinkEvent, linebot: LineBotSvc, args: list=None):
-            handler: AccountLinkEventHandlerTemplate = linebot.events[EventHandler.AccountLink.value]
+            handler: AccountLinkEventHandlerTemplate = linebot.agent.get_handler(EventHandler.AccountLink.name)
             handler.handle(event)
 
         '''
@@ -191,7 +190,7 @@ def linebot_view(app: Meolask, url_prefix: str='/api/linebot', services: dict[st
         @svc_linebot.handler.add(ThingsEvent)
         @svc_linebot.handler_add_svc_linebot(args=None)
         def on_things_eventHandler(event: ThingsEvent, linebot: LineBotSvc, args: list=None):
-            handler: ThingsEventHandlerTemplate = linebot.events[EventHandler.Things.value]
+            handler: ThingsEventHandlerTemplate = linebot.agent.get_handler(EventHandler.Things.name)
             handler.handle(event)
 
         '''
@@ -235,8 +234,6 @@ def linebot_view(app: Meolask, url_prefix: str='/api/linebot', services: dict[st
         Rich Menu Event (豐富選單事件)：
         當使用者與豐富選單互動時觸發 >> 可以根據不同的選單選項進行相應的處理
         '''
-
-    log.dividers()
 
     # For Test
     def EventHandlerTrigger(event_type: str):

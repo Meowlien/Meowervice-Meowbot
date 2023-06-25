@@ -3,7 +3,7 @@ import configparser
 # config
 path_settings = 'settings.ini'
 config = configparser.ConfigParser()
-config.read(path_settings)
+config.read(path_settings, encoding='utf-8')
 
 # service
 # -------------------------------------------------
@@ -34,6 +34,11 @@ LINE_BOT_AGENT_ALI_CHANNEL_SECRET = config.get('line-bot', 'agent_ali_secret')
 # ChatGPT
 # -------------------------------------------------
 CHAT_GPT_KEY = config.get('chatgpt', 'key')
-
-
-
+# [chatgpt.endpoint_url]
+CHAT_GPT_URL_PG = config.get('chatgpt.endpoint_url', 'OpenAi_Playground')
+CHAT_GPT_URL_3 = config.get('chatgpt.endpoint_url', 'OpenAi_GPT-3')
+CHAT_GPT_URL_4 = config.get('chatgpt.endpoint_url', 'OpenAi_GPT-4')
+# [chatgpt.model]
+CHAT_GPT_MODEL_TURBO = config.get('chatgpt.model', 'GPT_turbo')
+CHAT_GPT_MODEL_DAVINCI_2 = config.get('chatgpt.model', 'GPT_davinci-2')
+CHAT_GPT_MODEL_DAVINCI_3 = config.get('chatgpt.model', 'GPT_davinci-3')

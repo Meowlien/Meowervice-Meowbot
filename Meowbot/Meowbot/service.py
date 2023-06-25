@@ -12,6 +12,7 @@ class MongoDbCtxType(Enum):
 class ServiceType(Enum):
     # Linebot 服務請遵循命名規範： LinebotAgent_Xxx
     LinebotAgent_Meowlibot = 0,
-    LinebotAgent_Ali = auto()
-
+    LinebotAgent_Ali = auto(),
+    # ChatGPT
+    ChatGPT_Turbo = auto(),
 

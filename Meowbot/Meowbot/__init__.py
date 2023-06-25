@@ -5,6 +5,8 @@ from MeowkitPy.logging.logger import log
 from Meolask.example.register import ExampleControllers
 from Meolask.register import BaseControllers
 from Meowbot.register import (
+    show_registry,
+    Services,
     MongoDbContexts,
     Controllers
 )
@@ -17,74 +19,42 @@ app = Meolask(__name__)
 
 log.LogInfomation(f'Create Service: MongoDB >> Connecting...')
 mongo_client_ali = MongoClient(config.DB_MONGO_URI_ALI)
-
-
-# 注冊列表
-# -----------------------------------------------------
-# 資料庫-注冊表
 log.dividers('-')
-app.register_database(MongoDbContexts(), mongo_client_ali)
+
+# 注冊列表(每個注冊都以組為單位，即一個注冊内容中，有許多注冊項)
+# -----------------------------------------------------
+
+# 服務-注冊表
+app.register_services(Services())   # 服務項
+# More...
+
+# 資料庫-注冊表
+app.register_database(MongoDbContexts(), mongo_client_ali) # BUG: 第二個參數形態不符
 # More...
 
 # 控制器-注冊表
-log.dividers('-')
 app.register_controllers(BaseControllers())      # 基礎 api (必要)
 app.register_controllers(ExampleControllers())   # 範例 api
 app.register_controllers(Controllers())          # 自定義 api
 # More...
 
 
-# For: Debug
-# -----------------------------------------------------
-with app.test_request_context(): # 獲取所有已注冊的路由
-    routes = [str(rule) for rule in app.url_map.iter_rules()]
-for route in routes: # 輸出所有已注冊的路由
-    log.LogInfomation(f'Registered (Route) >> {route}')
 
+# For Debug
+if app.mode_debug == True:
 
+    # 顯示 <服務-注冊表> 清單
+    show_registry()
+    log.dividers('-')
 
+    # 顯示 <資料庫上下文-注冊表> 清單
+    # todo:
+    #log.dividers('-')
 
+    # 顯示 <控制器-注冊表> 清單
+    with app.test_request_context(): # 獲取所有已注冊的路由
+        routes = [str(rule) for rule in app.url_map.iter_rules()]
+    for route in routes: # 輸出所有已注冊的路由
+        log.LogInfomation(f'Registered (Route) >> {route}')
+    log.dividers('-')
 
-
-
-
-
-
-
-# For Test
-# -----------------------------------------------------
-
-
-#try:
-#    db: UserManager = app.services['UserManager']
-#    db.get_all_users()
-#except Exception as e:
-#    print(f'Prob >> {e}')
-
-
-
-
-#import requests
-#from settings import CHAT_GPT_KEY
-
-#import sys
-## 設定 console 編碼為 utf-8
-#sys.stdout.reconfigure(encoding='utf-8')
-
-#print(f'Test-Key: {CHAT_GPT_KEY}')
-#response = requests.post(
-#    'https://api.openai.com/v1/chat/completions',
-#    headers={
-#        'Content-Type': 'application/json',
-#        'Authorization': f'Bearer {CHAT_GPT_KEY}',
-#    },
-#    json={
-#        'model': 'gpt-3.5-turbo',
-#        'messages': [
-#            {"role": "user", "content": "I'm testing ChatGPT API. U can said anything to prove I'm success."},
-#            {"role": "assistant", "content": ""}
-#        ],
-#    }
-#)
-
-#print(response.content.decode('utf-8'))

@@ -4,14 +4,19 @@
 消息回復：所有制式回復在此定義
 命名規範：以 msg_ 作爲前綴
 '''
+import json
 from linebot import LineBotApi
-from linebot.models import * # line 所提供的所有 事件定義
+from linebot.models import *
+from Meowbot.service import ServiceType # line 所提供的所有 事件定義
 from Meowbot.services.template_linebot import CommandTemplate
 from MeowkitPy.logging.logger import log
 
 # 指令集
-def instructions(command: CommandTemplate):
-    #log.LogInfomation(f'Registered >> Message Instructions Set')
+def instructions(command: CommandTemplate, args: dict[str,any]=None):
+
+    # 選用服務
+    svc_type_chatgpt = ServiceType.ChatGPT_Turbo
+    # More...
 
 
     ## For: 有人加入群組時
@@ -45,21 +50,6 @@ def instructions(command: CommandTemplate):
 
 
     # For: AI
-    import json
-    #from Meowbot.services.template_chatgpt import Service as ChatGPT
-    #from settings import (
-    #    CHAT_GPT_KEY,
-    #    CHAT_GPT_URL_3,
-    #    CHAT_GPT_MODEL_TURBO
-    #    #CHAT_GPT_MODEL_DAVINCI_3
-    #)
-    #ai = ChatGPT(
-    #    CHAT_GPT_URL_3,
-    #    CHAT_GPT_KEY,
-    #    CHAT_GPT_MODEL_TURBO,
-    #    #CHAT_GPT_MODEL_DAVINCI_3,
-    #    'Test-AI'
-    #)
     @command.add(cmds=['#ai'], args={'tokens':None})
     def msg_gpt(linebot_api: LineBotApi, event, args: dict[str,any]):
 
@@ -75,6 +65,7 @@ def instructions(command: CommandTemplate):
         # todo: 過濾無權限使用持 API 的用戶
 
         # 呼叫 AI
+        ai = registry.get(svc_type_chatgpt, None)
         response = ai.handle(' '.join(tokens[1:]))
         response_data = response.json()
         print(f'{json.dumps(response_data, indent=4)}')

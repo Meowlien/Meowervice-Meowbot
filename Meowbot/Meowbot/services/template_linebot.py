@@ -188,9 +188,9 @@ class EventHandlerTemplate():
         self.command = command
 
     # 指令注冊
-    def command_register(self, func:any):
+    def command_register(self, func:any, args: dict[str,any]=None):
         try:
-            func(self.command)
+            func(self.command, args)
         except AttributeError as e:
             log.LogWarning(f'Command Register Fail >> {e}')
 

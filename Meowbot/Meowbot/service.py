@@ -1,7 +1,13 @@
 ﻿'''
 服務清單：為避免多個 Service 在注冊到 Controller 時，造成 key 衝突
 '''
+from abc import ABC, abstractmethod
 from enum import Enum, auto
+
+# 容器: 全域
+class Container(ABC):
+    services: dict['ServiceType', any] = None
+
 
 # 上下文
 class MongoDbCtxType(Enum):

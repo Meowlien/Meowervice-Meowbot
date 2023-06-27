@@ -38,15 +38,15 @@ class Services(RegisterTemplate):
 
     # [Abs:Override]：注冊器
     def register(self, app: Meolask) -> None:
-        self._register(services = {
+        self._register(services = [
             ChatGPTService(
-                ServiceType.ChatGPT_Turbo,
-                CHAT_GPT_URL_3,
-                CHAT_GPT_KEY,
-                CHAT_GPT_MODEL_TURBO,
+                ServiceType.ChatGPT_Turbo,  # Service >> ID
+                CHAT_GPT_URL_3,             # ChatGPT >> 連結(API)
+                CHAT_GPT_KEY,               # ChatGPT >> 密鑰
+                CHAT_GPT_MODEL_TURBO,       # ChatGPT >> 資料模型
             ),
             # More...
-        })
+        ])
 
 
 # 資料庫上下文注冊器 (MongoDB)
@@ -72,7 +72,7 @@ class Controllers(RegisterTemplate):
         app.register_view(LinebotController, '/api/linebot', services = self._package(
                 services = [
                     LinebotService(
-                        ServiceType.LinebotAgent_Meowlibot,
+                        ServiceType.LinebotAgent_Meowlibot,                 # Service >> ID
                         LINE_BOT_AGENT_MEOWLIBOT_CHANNEL_SECRET,            # Line-bot >> 密鑰
                         LINE_BOT_AGENT_MEOWLIBOT_CHANNEL_ACCESS_TOKEN,      # Line-bot >> 訪問令牌(金鑰)
                         LinebotAgent_Meowlibot(                             # Agent >> 服務代理：提供服務的對象
@@ -81,7 +81,7 @@ class Controllers(RegisterTemplate):
                         )
                     ),
                     LinebotService(
-                        ServiceType.LinebotAgent_Ali,
+                        ServiceType.LinebotAgent_Ali,                       # Service >> ID
                         LINE_BOT_AGENT_ALI_CHANNEL_SECRET,                  # Line-bot >> 密鑰
                         LINE_BOT_AGENT_ALI_CHANNEL_ACCESS_TOKEN,            # Line-bot >> 訪問令牌(金鑰)
                         LinebotAgent_Meowlibot(                             # Agent >> 服務代理：提供服務的對象
@@ -94,29 +94,4 @@ class Controllers(RegisterTemplate):
                 register = True
             )
         )
-        #                  = {
-        #    ServiceType.LinebotAgent_Meowlibot:                     # 索引值(用於查詢服務)
-        #    LinebotService(
-        #        ServiceType.LinebotAgent_Meowlibot,
-        #        LINE_BOT_AGENT_MEOWLIBOT_CHANNEL_SECRET,            # Line-bot >> 密鑰
-        #        LINE_BOT_AGENT_MEOWLIBOT_CHANNEL_ACCESS_TOKEN,      # Line-bot >> 訪問令牌(金鑰)
-        #        LinebotAgent_Meowlibot(                             # Agent >> 服務代理：提供服務的對象
-        #            str(ServiceType.LinebotAgent_Meowlibot.name),   # Agent >> 記錄索引值
-        #            '_id-gakl94gfdt5ynak6'                          # 代理者ID
-        #        )
-        #    ),
-        #    ServiceType.LinebotAgent_Ali:                           # 索引值(用於查詢服務)
-        #    LinebotService(
-        #        ServiceType.LinebotAgent_Ali,
-        #        LINE_BOT_AGENT_ALI_CHANNEL_SECRET,                  # Line-bot >> 密鑰
-        #        LINE_BOT_AGENT_ALI_CHANNEL_ACCESS_TOKEN,            # Line-bot >> 訪問令牌(金鑰)
-        #        LinebotAgent_Meowlibot(                             # Agent >> 服務代理：提供服務的對象
-        #            str(ServiceType.LinebotAgent_Ali.name),         # Agent >> 記錄索引值
-        #            '_id-pnm56asjk45lkakl'                          # 代理者ID
-        #        )
-        #    ),
-        #     # More... LineBot-Agent
-        #})
-        # More...
-
 

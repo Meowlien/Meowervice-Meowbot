@@ -4,12 +4,20 @@ from pymongo import MongoClient
 from MeowkitPy.logging.logger import log
 from Meolask.example.register import ExampleControllers
 from Meolask.register import BaseControllers
+from Meolask.template import RegisterTemplate
+from Meowbot.service import Container
 from Meowbot.register import (
     show_registry,
     Services,
     MongoDbContexts,
     Controllers
 )
+
+# 初始化設定
+# -----------------------------------------------------
+RegisterTemplate.initialize(Container.services)
+RegisterTemplate.debug_compare_registry(Container.services)
+
 
 # 創建：服務項
 # -----------------------------------------------------
@@ -39,7 +47,6 @@ app.register_controllers(Controllers())          # 自定義 api
 # More...
 
 
-
 # For Debug
 if app.mode_debug == True:
 
@@ -58,3 +65,6 @@ if app.mode_debug == True:
         log.LogInfomation(f'Registered (Route) >> {route}')
     log.dividers('-')
 
+
+    # DEBUG >> 驗證
+    #RegisterTemplate.debug_compare_registry(Container.services)

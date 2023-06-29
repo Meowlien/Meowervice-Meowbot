@@ -2,7 +2,7 @@
 Chat GPT
 '''
 
-from Meolask.template import ServiceTemplate
+from Meolask.modules.service import ServiceTemplate
 from MeowkitPy.logging.logger import log
 from enum import Enum, auto
 import json, requests

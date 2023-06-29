@@ -7,7 +7,8 @@
 import json
 from linebot import LineBotApi
 from linebot.models import *
-from Meowbot.service import ServiceType # line 所提供的所有 事件定義
+#from Meowbot.service import ServiceType # line 所提供的所有 事件定義
+from Meowbot.runtime import ServiceType
 from Meowbot.services.template_linebot import CommandTemplate
 from MeowkitPy.logging.logger import log
 

@@ -1,5 +1,5 @@
 from pymongo import MongoClient
-from Meolask.template import ServiceTemplate
+from Meolask.modules.service import ServiceTemplate
 
 class MongoDbCtxTemplate(ServiceTemplate):
     

@@ -6,12 +6,12 @@ from flask import request, abort
 from Meolask.meolask import Meolask
 from MeowkitPy.logging.logger import log
 from MeowkitPy.data.validation import *
-from Meowbot.service import ServiceType, MongoDbCtxType
+from Meowbot.runtime import *
 from Meowbot.services.template_linebot import *
 from Meowbot.services.template_linebot import Service as LineBotSvc
 from Meowbot.databases.mongodb.user_manager import UserManager
 
-def linebot_view(app: Meolask, url_prefix: str='/api/linebot', services: dict[str,ServiceTemplate]=None):
+def linebot_view(app: Meolask, url_prefix: str='/api/linebot', services: dict[str,str]=None):
 
     # 參數設定
     # -----------------------------------------------------
@@ -20,11 +20,11 @@ def linebot_view(app: Meolask, url_prefix: str='/api/linebot', services: dict[st
 
     # 前置檢查(注冊時)
     # -----------------------------------------------------
-    # 必須要有服務對象的檢查(如無需則注解此段)
-    if services == None:
-        raise AttributeError(f'Service list cannot be None! >> {__name__}')
+    ## 必須要有服務對象的檢查(如無需則注解此段)
+    #if services == None:
+    #    raise AttributeError(f'Service list cannot be None! >> {__name__}')
     # 1. 至少要有一個 Key 開頭為 ServiceType.LinebotAgent_Xxx 的服務
-    svc_linebots: dict[str,LineBotSvc] = dict_filtered(services, 'ServiceType.LinebotAgent_', StringMatchType.StartsWith)
+    svc_linebots: dict[str,LineBotSvc] = dict_filtered(Runtime.registry_service, 'ServiceType.LinebotAgent_', StringMatchType.StartsWith)
     if len(svc_linebots) == 0:
         raise AttributeError(f'Service[ServiceType.LinebotAgent_???] at least one agent for Linebot! >> {__name__}')
 

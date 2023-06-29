@@ -2,7 +2,7 @@
 Meowlibot (阿里機器人)：
 事件執行處理器 >> [阿里機器人] 對於 Line 事件觸發後的響應行爲
 '''
-from Meowbot.service import ServiceType
+#from Meowbot.runtime import
 from MeowkitPy.data.validation import list_filter
 from Meowbot.services.template_linebot import *
 from Meowbot.services.meowlibot.handlers.message import instructions as msg_instructions

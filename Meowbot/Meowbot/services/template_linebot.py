@@ -5,7 +5,7 @@ Bot (機器人)：
 '''
 
 from abc import ABC, abstractmethod
-from Meolask.template import ServiceTemplate
+from Meolask.modules.service import ServiceTemplate
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import * # line 所提供的所有 事件定義

@@ -33,7 +33,7 @@
     <Compile Include="Meowbot\databases\mongodb\group_manager.py" />
     <Compile Include="Meowbot\databases\mongodb\user_manager.py" />
     <Compile Include="Meowbot\register.py" />
-    <Compile Include="Meowbot\service.py" />
+    <Compile Include="Meowbot\runtime.py" />
     <Compile Include="Meowbot\services\meowai.py" />
     <Compile Include="Meowbot\services\meowlibot\handlers\command.py" />
     <Compile Include="Meowbot\services\meowlibot\handlers\message.py" />

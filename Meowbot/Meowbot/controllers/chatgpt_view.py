@@ -4,16 +4,16 @@
 from flask import request, abort
 from Meolask.meolask import Meolask
 from MeowkitPy.logging.logger import log
-from Meowbot.service import ServiceType, MongoDbCtxType
+from Meowbot.runtime import *
 from Meowbot.services.meowlibot import *
 
-def chatgpt_view(app: Meolask, url_prefix: str='/api/chatgpt', services: dict[str,ServiceTemplate]=None):
+def chatgpt_view(app: Meolask, url_prefix: str='/api/chatgpt', svc_registration_info: dict[str,ServiceTemplate]=None):
 
     # 參數設定
     mode_debug = app.mode_debug
 
     # 前置檢查：必須要有服務對象的檢查(如無需則注解此段)
-    if services == None:
+    if svc_registration_info == None:
         raise AttributeError(f'Service list cannot be None! >> {__name__}')
 
     # For 路由

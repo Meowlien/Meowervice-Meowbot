@@ -32,7 +32,7 @@ def instructions(command: CommandTemplate, args: dict[str,any]=None):
     # For: 學你說
     @command.add(cmds=['###'], args={'tokens':None})
     def msg_imitate(linebot_api: LineBotApi, event, args: dict[str,any]):
-
+        print(f'Test: >>> {CommandTemplate.ArgsType.Tokens.name}')
         tokens = args.get('tokens', ['#fail','[Warnning]\nTokens Parse Fail.'])
 
         # 獲取：事件資料

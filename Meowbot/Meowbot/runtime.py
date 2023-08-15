@@ -13,6 +13,9 @@ class Runtime(ABC):
             log.LogInfomation(f'Registered (Service) >> {val.id}')
 
 
+# 注冊訊息 / Key
+# -----------------------------------------------------
+
 # 上下文
 class MongoDbCtxType(Enum):
     UserManager = 0,

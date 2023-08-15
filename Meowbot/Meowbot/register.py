@@ -36,6 +36,7 @@ class Services(ServiceRegister):
 
     # [Abs:Override]：注冊器
     def trigger_registration(self, app: Meolask) -> None:
+
         self.register(services = [
             ChatGPTService(
                 ServiceType.ChatGPT_Turbo,  # Service >> ID
@@ -43,7 +44,29 @@ class Services(ServiceRegister):
                 CHAT_GPT_KEY,               # ChatGPT >> 密鑰
                 CHAT_GPT_MODEL_TURBO,       # ChatGPT >> 資料模型
             ),
-            # More...
+            # More... AI
+        ])
+
+        self.register(services = [
+            LinebotService(
+                ServiceType.LinebotAgent_Meowlibot,                 # Service >> ID
+                LINE_BOT_AGENT_MEOWLIBOT_CHANNEL_SECRET,            # Line-bot >> 密鑰
+                LINE_BOT_AGENT_MEOWLIBOT_CHANNEL_ACCESS_TOKEN,      # Line-bot >> 訪問令牌(金鑰)
+                LinebotAgent_Meowlibot(                             # Agent >> 服務代理：提供服務的對象
+                    str(ServiceType.LinebotAgent_Meowlibot.name),   # Agent >> 記錄索引值
+                    '_id-gakl94gfdt5ynak6'                          # 代理者ID
+                )
+            ),
+            LinebotService(
+                ServiceType.LinebotAgent_Ali,                       # Service >> ID
+                LINE_BOT_AGENT_ALI_CHANNEL_SECRET,                  # Line-bot >> 密鑰
+                LINE_BOT_AGENT_ALI_CHANNEL_ACCESS_TOKEN,            # Line-bot >> 訪問令牌(金鑰)
+                LinebotAgent_Meowlibot(                             # Agent >> 服務代理：提供服務的對象
+                    str(ServiceType.LinebotAgent_Ali.name),         # Agent >> 記錄索引值
+                    '_id-pnm56asjk45lkakl'                          # 代理者ID
+                )
+            ),
+            # More... LineBot-Agent
         ])
 
 
@@ -77,6 +100,7 @@ class Controllers(ServiceRegister):
                             str(ServiceType.LinebotAgent_Meowlibot.name),   # Agent >> 記錄索引值
                             '_id-gakl94gfdt5ynak6'                          # 代理者ID
                         )
+                        # Name = None
                     ),
                     LinebotService(
                         ServiceType.LinebotAgent_Ali,                       # Service >> ID
@@ -86,6 +110,7 @@ class Controllers(ServiceRegister):
                             str(ServiceType.LinebotAgent_Ali.name),         # Agent >> 記錄索引值
                             '_id-pnm56asjk45lkakl'                          # 代理者ID
                         )
+                        # Name = None
                     ),
                     # More... LineBot-Agent
                 ]

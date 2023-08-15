@@ -28,7 +28,6 @@ def linebot_view(app: Meolask, url_prefix: str='/api/linebot', services: dict[st
     if len(svc_linebots) == 0:
         raise AttributeError(f'Service[ServiceType.LinebotAgent_???] at least one agent for Linebot! >> {__name__}')
 
-
     # For 路由
     # -----------------------------------------------------
     '''
@@ -64,7 +63,7 @@ def linebot_view(app: Meolask, url_prefix: str='/api/linebot', services: dict[st
                     EventHandlerTrigger('message')     # 測試：EventHandlerTrigger 自行分發
                     app.logger.info("Request data: " + request_data)
                 else:
-                    for svc_linebot in svc_linebots.values():
+                    for svc_linebot in svc_linebots.values(): # Opt: 直接 svc_linebots.get('key', None) 避免過多的迭代卡頓
                         if svc_linebot.agent.agent_id == agent_id:
                             svc_linebot.handler.handle(request_data, line_signature)  # 綫上：WebhookHandler 自動分發
                             app.logger.info("Request data: " + request_data)
